@@ -1,0 +1,7 @@
+1. top 查看占用CPU高的Java进程的PID
+
+2. 找出线程，top -p PID -H        #查看哪些线程cpu占用率比较高
+
+3. printf  "%x\n" 线程PID     ＃打印出占用cpu较高的线程id的16进制格式
+
+4.jstack 进程PID | grep 线程PID的16进制  -A 30  （必须是Java进程运行的用户执行此命令,30为显示下面30行，如果不够的话，可以加大）
