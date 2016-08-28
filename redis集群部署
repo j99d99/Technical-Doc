@@ -1,11 +1,5 @@
 ###redis集群部署
 
-雪橙登录信息：
-teamviewer
-伙伴ID:	307496278
-密码:	28zx7m
-
-
 安装
 yum install -y gcc-c++
 tar zxvf redis-3.0.7.tar.gz
