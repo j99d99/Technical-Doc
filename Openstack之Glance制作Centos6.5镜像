@@ -1,0 +1,47 @@
+Openstack之Glance制作Centos6.5镜像
+1.创建磁盘
+qemu-img create -f qcow2 /data/KvmDisk/centos6.5.img 10G
+2.安装虚拟机
+virt-install --virt-type kvm --name centos-6.5_x86_64 --ram=2048 --vcpus=2 \
+				--disk /data/KvmDisk/centos6.5.img,format=qcow2 \
+				--network network=default   --graphics vnc,listen=0.0.0.0,port=5901 \
+				--noautoconsole   --os-type=linux --os-variant=rhel6 \
+				--cdrom=/data/iso/CentOS-6.5-x86_64-minimal.iso
+3.重启虚拟机
+virsh start centos-6.5_x86_64
+4.通过vnc连接服务器
+5.修改配置
+vim /boot/grub/menu.lst
+kernel ...(省略n个参数,末尾添加)... console=tty0 console=ttyS0,115200n8
+6.配置网卡
+vim /etc/sysconfig/network-scripts/ifcfg-eth0
+	TYPE=Ethernet
+	DEVICE=eth0
+	ONBOOT=yes
+	BOOTPROTO=dhcp
+	NM_CONTROLLED=no
+7.vim /etc/sysconfig/network
+	NOZERCONF=yes
+8.安装电源管理模块
+	yum install -y acpid
+	chkconfig acpid on
+9.安装resize，自动扩展根分区
+	yum install -y git
+	git clone https://github.com/flegmatik/linux-rootfs-resize.git
+	cd linux-rootfs-resize
+	./install
+10.安装cloud-init
+	yum install -y cloud-utils cloud-init parted
+	修改配置cloud
+	vim /etc/cloud/cloud.cfg
+	cloud_init_modules:
+	...
+	- resolv-conf
+11.关键
+	poweroff
+12.清除网络相关硬件生成信息
+	virt-sysprep -d centos-6.5_x86_64
+13.压缩镜像
+	virt-sparsify --compress /data/KvmDisk/centos6.5.img
+	
+PS:亲测成功...
