@@ -1,0 +1,60 @@
+{% for list in asset_waitout %}
+<!--asset_waitout为Flask方法传递给jinja2的参数-->
+<td>
+	<tr>
+		<td>{{ list.user }}</td>
+		<td>{{ list.id }}</td>
+		<!--data-target对应模态框的id="myModal"-->
+		<td><button type="button" class="btn btn-xs btn-primary" list-id='{{ list.id }}' list-user='{{ list.user }}' data-toggle="modal" data-target="#myModal">出库</button></td>
+	</tr>
+</td>
+<!--模态框-->
+<div class="modal fade" id="myModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+			<!--模态框header区-->
+            <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+			</div>
+			<!--模态框body区-->
+            <div class="modal-body">    
+            <p>请确认出库数量并确定</p>
+            </div>
+			<!--模态框footer区-->
+            <div class="modal-footer">
+				<!--data-dismiss效果是点击后弹框消失-->
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary btn-save" data-dismiss="modal">确定</button>
+			</div>
+        </div>
+    </div>
+</div>
+<!--END-->
+{% endfor %}
+<!--通过scripts传递点击的参数-->
+<script>
+    $(function () {
+		$('button[list-id]').on('click',function(){
+			var currentId = $(this).attr('list-id');
+			// var currentUser = $(this).attr('list-user');
+			// var currentName = $(this).attr('list-name');
+			// var currentCount = $(this).attr('list-count');
+			// var currentReason = $(this).attr('list-reason');
+		        $('.btn-save').on('click', function () {
+		            $.ajax({
+		                type : 'POST',
+		                url : 'http://192.168.1.110:5000/asset_waitout/'+currentId,   //发送请求的url地址
+		                data: {username:currentUser,assetcount:currentCount,assetname:currentName,reason:currentReason}, //请求带的参数
+		                dataType : 'json' , //返回数据类型，一般为json
+		                success: function (res) {  //返回成功时的回调函数
+		                    console.log(res);
+		                },
+		                error: function (res) { //返回出错时的回调函数，一般为系统级别的异常
+		                    console.log(res);
+		                }
+		            })
+		        });
+		    });
+		});
+</script>		
