@@ -131,7 +131,7 @@ Starting Redis server...
 ####二.安装集群需要的相关组件
 ```
 [root@redis01 ~]# yum -y  install zlib ruby rubygems rubygems-devel
-[root@redis01 ~]# gem install redis 
+[root@redis01 ~]# gem install redis  --version 3.0.4
 ```
 
 ####三.创建集群
@@ -166,7 +166,7 @@ M: c18bae19c335c2bfad4c4628d562bd937bd608ec 192.168.122.112:6379
    slots:0-5460 (5461 slots) master
 S: c67e2adf957cb6f123103c677fb998135ca61a5b 192.168.122.112:6380
    replicates 6343d46d255182e0e116dfad536028702e776251
-Can I set the above configuration? (type 'yes' to accept): yes
+Can I set the above configuration? (type 'yes' to accept): yes	#确认集群节点信息
 >>> Nodes configuration updated
 >>> Assign a different config epoch to each node
 >>> Sending CLUSTER MEET messages to join the cluster

@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "root":`date +%s | sha256sum | base64 | head -c 16 | tee /root/.rootpass`  | chpasswd
+chattr +i /root/.rootpass
+chattr +i /root/.ssh/authorized_keys
